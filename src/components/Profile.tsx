@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userDataType } from "../interface/userDataType";
 import { RootState } from "../store/store";
 function Profile() {
   const { isHovering } = useSelector((state: RootState) => state.hoverSlice);
   const { profile } = useSelector((state: RootState) => state.profileSlice);
-
+  const progressBar = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (isHovering == true) {
+      console.log("Hello ! i am Here");
+      progressBar.current?.classList.remove("w-0");
+      progressBar.current?.classList.add("w-[45%]");
+    } else {
+      progressBar.current?.classList.remove("w-[45%]");
+      progressBar.current?.classList.add("w-0");
+    }
+  }, [isHovering]);
   return (
     <div>
       <div className={"profile-section " + `${isHovering ? "" : "hidden"}`}>
@@ -34,10 +44,18 @@ function Profile() {
           <div className='use-plans-content text-left '>
             <div className='use-plans mb-6 '>
               <p className='py-2 font-bold'>Plan Uses</p>
-              <div className='w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700'>
+              {/* <div className='w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700'>
                 <div
                   className='bg-yellow-500 h-2.5 rounded-full'
                   style={{ width: "45%" }}
+                ></div> 
+              </div> */}
+              <div className='h-3 relative max-w-xl rounded-full overflow-hidden'>
+                <div className='w-full h-full bg-gray-200 absolute'></div>
+                <div
+                  id='bar'
+                  className='transition-all ease-out duration-1000 h-full  rounded-full bg-yellow-500 relative'
+                  ref={progressBar}
                 ></div>
               </div>
             </div>
